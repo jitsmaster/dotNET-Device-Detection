@@ -741,7 +741,7 @@ namespace FiftyOne.Foundation.Mobile.Detection.Entities
         /// Used by the node ranked signature indexes lists to identify
         /// the corresponding signature.
         /// </summary>
-        internal ISimpleList RankedSignatureIndexes
+        public ISimpleList RankedSignatureIndexes
         {
             get { return _rankedSignatureIndexes; }
         }

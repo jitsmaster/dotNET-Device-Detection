@@ -196,7 +196,8 @@ namespace FiftyOne.Foundation.Mobile.Detection
                             DateTime.UtcNow ||
                         WebProvider.ActiveProvider.DataSet.Name == "Lite"))
                     {
-                        if (Download(LicenceKey.Keys) == 
+                        var downloadResult = Download(LicenceKey.Keys);
+                        if (downloadResult == 
                             LicenceKeyResults.Success)
                         {
                             WebProvider.Refresh();
@@ -488,16 +489,16 @@ namespace FiftyOne.Foundation.Mobile.Detection
                     case ((HttpStatusCode)429):
                         result = AutoUpdateStatus.
                             AUTO_UPDATE_ERR_429_TOO_MANY_ATTEMPTS;
-                        break;
+                        throw;
                     case HttpStatusCode.NotModified:
                         result = AutoUpdateStatus.AUTO_UPDATE_NOT_NEEDED;
                         break;
                     case HttpStatusCode.Forbidden:
                         result = AutoUpdateStatus.AUTO_UPDATE_ERR_403_FORBIDDEN;
-                        break;
+                        throw;
                     default:
                         result = AutoUpdateStatus.AUTO_UPDATE_HTTPS_ERR;
-                        break;
+                        throw;
                 }
             }
 

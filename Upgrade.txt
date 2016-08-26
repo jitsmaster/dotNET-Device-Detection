@@ -1,0 +1,7 @@
+﻿Make sure to update constant key
+
+		internal const string PremiumLicenceKey = "D9DAAA24BJ3DSAJABJAGAWSZPPN4ULWBPBMLV99RLWWGLWN9EZ3N8PEMQ8VRP8U3FKYHPFTH5DFL464B9L5PYUC";
+
+in DetectionConstants.cs.
+		
+Also, sign the foundation project

@@ -273,6 +273,10 @@ namespace FiftyOne.Foundation.Mobile.Detection
             {
                 var directory = new DirectoryInfo(
                                     Mobile.Configuration.Support.GetFilePath(Constants.TemporaryFilePath));
+
+                if (!directory.Exists)
+                    return;
+
                 foreach (var file in directory.GetFiles())
                 {
                     try

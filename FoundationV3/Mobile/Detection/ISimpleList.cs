@@ -127,7 +127,7 @@ namespace FiftyOne.Foundation.Mobile.Detection
     /// implementation where a factory is not required to construct the 
     /// entity.
     /// </summary>
-    internal interface ISimpleList
+    public interface ISimpleList
     {
         /// <summary>
         /// Returns the values in the list starting at the index provided.
