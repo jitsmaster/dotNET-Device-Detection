@@ -140,6 +140,12 @@ namespace FiftyOne.Foundation.Mobile.Detection
             if (IsKeyFormatValid(key) &&
                 _dynamicKeys.Contains(key) == false)
                 _dynamicKeys.Add(key);
+
+            //aw: after adding dynamic key and the there is only one key
+            //recheck for update, since the check for update scheduling is on the
+            //stupid static constructor
+            if (_dynamicKeys.Count == 1 && DetectorModule._autoUpdateDownloadTimer == null)
+                DetectorModule._scheduleAutoUpdate();
         }
 
         /// <summary>

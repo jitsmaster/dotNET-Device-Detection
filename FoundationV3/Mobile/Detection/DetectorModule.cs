@@ -54,7 +54,7 @@ namespace FiftyOne.Foundation.Mobile.Detection
         /// <summary>
         /// Timer used to check for new versions of the data file.
         /// </summary>
-        private static Timer _autoUpdateDownloadTimer;
+        internal static Timer _autoUpdateDownloadTimer;
 
         /// <summary>
         /// Timer used to check for new versions of the file locally.
@@ -67,7 +67,11 @@ namespace FiftyOne.Foundation.Mobile.Detection
 
         static DetectorModule()
         {
- //           System.Diagnostics.Debugger.Launch();
+            _scheduleAutoUpdate();
+        }
+
+        internal static void _scheduleAutoUpdate()
+        {
             if (Detection.Configuration.Manager.Enabled)
             {
                 // If there are licence keys available with which to fetch the 
@@ -184,7 +188,7 @@ namespace FiftyOne.Foundation.Mobile.Detection
         }
 
         #endregion
-        
+
         #region Methods
 
         private void OnPostMapRequestHandler(object sender, EventArgs e)
@@ -203,7 +207,7 @@ namespace FiftyOne.Foundation.Mobile.Detection
         {
             // Determine if the bandwidth script will be called.
             var bandwidthEnabled = Feature.Bandwidth.GetIsEnabled(HttpContext.Current);
-            
+
             // Register the image optimising script to initiate optimisation.
             var imageOptimiserEnabeld = Feature.ImageOptimiser.AddScript((System.Web.UI.Page)page);
 
@@ -441,7 +445,7 @@ namespace FiftyOne.Foundation.Mobile.Detection
                 foreach (var propertyName in HttpUtility.UrlDecode(queryString).Split(
                     new char[] { ' ', ',', '&', '|' }))
                 {
-                    var property = WebProvider.ActiveProvider.DataSet.Properties.FirstOrDefault(i => 
+                    var property = WebProvider.ActiveProvider.DataSet.Properties.FirstOrDefault(i =>
                         i.Name.Equals(propertyName, StringComparison.InvariantCultureIgnoreCase));
                     if (property != null)
                         GetFeatureJavaScript(match, features, property);
@@ -461,7 +465,7 @@ namespace FiftyOne.Foundation.Mobile.Detection
             var values = match[property.Name];
             if (values != null)
             {
-                switch(property._valueType)
+                switch (property._valueType)
                 {
                     case Property.PropertyValueType.Bool:
                         bool valueBool;
