@@ -152,7 +152,7 @@ namespace FiftyOne.Foundation.Mobile.Detection
         /// can be provided in the following constant or in a file with the
         /// extension .lic in the bin folder.
         /// </summary>
-        internal const string PremiumLicenceKey = "D9DAAA24BJ3DSAJABJAGAWSZPPN4ULWBPBMLV99RLWWGLWN9EZ3N8PEMQ8VRP8U3FKYHPFTH5DFL464B9L5PYUC";
+        internal const string PremiumLicenceKey = "";
 
         /// <summary>
         /// The URL to use to get the latest device data from if a Premium licence key is provided.

@@ -369,6 +369,8 @@ namespace FiftyOne.Foundation.Mobile.Detection
             var compressedTempFile = GetTempFileName(binaryFile);
             var uncompressedTempFile = GetTempFileName(binaryFile);
 
+            EventLog.Info("Downloading mobile detection data...");
+
             try
             {
                 // Acquire a lock so that only one thread can enter this 
@@ -398,6 +400,9 @@ namespace FiftyOne.Foundation.Mobile.Detection
                 {
                     result = Decompress(
                         compressedTempFile, uncompressedTempFile);
+
+                    EventLog.Info("Mobile detection data file successfully decompressed to '{0}'",
+    uncompressedTempFile.FullName);
                 }
 
                 if (result == AutoUpdateStatus.AUTO_UPDATE_IN_PROGRESS)
@@ -410,6 +415,8 @@ namespace FiftyOne.Foundation.Mobile.Detection
                 {
                     result = ActivateDownloadedFile(
                             client, binaryFile, uncompressedTempFile);
+                    EventLog.Info("Mobile detection data file '{0}' actived.",
+    binaryFile.FullName);
                 }
             }
             finally
@@ -501,6 +508,9 @@ namespace FiftyOne.Foundation.Mobile.Detection
                         throw;
                 }
             }
+
+            EventLog.Info("Mobile detection data file successfully downloaded to '{0}'",
+                compressedTempFile.FullName);
 
             return result;
         }

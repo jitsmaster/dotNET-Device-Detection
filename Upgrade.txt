@@ -1,7 +1,51 @@
-﻿Make sure to update constant key
+﻿Change         internal ISimpleList RankedSignatureIndexes
+	to         public ISimpleList RankedSignatureIndexes
 
-		internal const string PremiumLicenceKey = "D9DAAA24BJ3DSAJABJAGAWSZPPN4ULWBPBMLV99RLWWGLWN9EZ3N8PEMQ8VRP8U3FKYHPFTH5DFL464B9L5PYUC";
+in DataSet.cs
 
-in DetectionConstants.cs.
-		
+Change 
+	internal interface ISimpleList
+to	
+	public  interface ISimpleList
+
+on ISimpleList.cs
+
+
+Replace the DownloadFile method error handling code for WebException with
+
+            catch (WebException ex)
+            {
+                //Server response was not 200. Data download can not commence.
+                switch (((HttpWebResponse)ex.Response).StatusCode)
+                {
+                    // Note: needed because TooManyRequests is not available in
+                    // earlier versions of the HttpStatusCode enum.
+                    case ((HttpStatusCode)429):
+                        result = AutoUpdateStatus.
+                            AUTO_UPDATE_ERR_429_TOO_MANY_ATTEMPTS;
+                        throw;
+                    case HttpStatusCode.NotModified:
+                        result = AutoUpdateStatus.AUTO_UPDATE_NOT_NEEDED;
+                        break;
+                    case HttpStatusCode.Forbidden:
+                        result = AutoUpdateStatus.AUTO_UPDATE_ERR_403_FORBIDDEN;
+                        throw;
+                    default:
+                        result = AutoUpdateStatus.AUTO_UPDATE_HTTPS_ERR;
+                        throw;
+                }
+            }
+
+on AutoUpdate.cs
+
+
+Comment out:
+
+#if !NUGET_BUILD
+[assembly: InternalsVisibleToAttribute("FiftyOne.Tests.Unit")]
+[assembly: InternalsVisibleToAttribute("FiftyOne.Tests.Integration")]
+#endif
+
+in AssemblyInfo.cs
+
 Also, sign the foundation project

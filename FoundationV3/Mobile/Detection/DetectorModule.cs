@@ -67,7 +67,7 @@ namespace FiftyOne.Foundation.Mobile.Detection
 
         static DetectorModule()
         {
-            System.Diagnostics.Debugger.Launch();
+ //           System.Diagnostics.Debugger.Launch();
             if (Detection.Configuration.Manager.Enabled)
             {
                 // If there are licence keys available with which to fetch the 
