@@ -85,6 +85,8 @@ namespace FiftyOne.Foundation.Mobile.Detection
                         null,
                         Constants.AutoUpdateDelayedStart,
                         Constants.AutoUpdateSleep);
+
+                    EventLog.Info("Initialized auto update check timer.");
                 }
 
                 // Check the master file more frequently incase it's changed.
