@@ -70,31 +70,45 @@ namespace FiftyOne.Foundation.Mobile.Detection
             _scheduleAutoUpdate();
         }
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+        public static Exception InitializationException = null;
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+
         internal static void _scheduleAutoUpdate()
         {
-            if (Detection.Configuration.Manager.Enabled)
+            try
             {
-                // If there are licence keys available with which to fetch the 
-                // binary data files.
-                if (Detection.Configuration.Manager.AutoUpdate &&
-                    LicenceKey.Keys.Length > 0)
+                //configuration may not exist, in that case just bypass it
+                if (Detection.Configuration.Manager.Enabled)
                 {
-                    // Start the auto update thread to check for new data files.
-                    _autoUpdateDownloadTimer = new Timer(
-                        new TimerCallback(AutoUpdate.CheckForUpdate),
-                        null,
-                        Constants.AutoUpdateDelayedStart,
-                        Constants.AutoUpdateSleep);
+                    // If there are licence keys available with which to fetch the 
+                    // binary data files.
+                    if (Detection.Configuration.Manager.AutoUpdate &&
+                        LicenceKey.Keys.Length > 0
+                        && _autoUpdateDownloadTimer == null)
+                    {
+                        // Start the auto update thread to check for new data files.
+                        _autoUpdateDownloadTimer = new Timer(
+                            new TimerCallback(AutoUpdate.CheckForUpdate),
+                            null,
+                            Constants.AutoUpdateDelayedStart,
+                            Constants.AutoUpdateSleep);
 
-                    EventLog.Info("Initialized auto update check timer.");
+                        EventLog.Info("Initialized auto update check timer.");
+                    }
+
+                    if (_fileCheckTimer == null)
+                        // Check the master file more frequently incase it's changed.
+                        _fileCheckTimer = new Timer(
+                            new TimerCallback(WebProvider.CheckDataFileRefresh),
+                            null,
+                            Constants.FileUpdateDelayedStart,
+                            Constants.FileUpdateSleep);
                 }
-
-                // Check the master file more frequently incase it's changed.
-                _fileCheckTimer = new Timer(
-                    new TimerCallback(WebProvider.CheckDataFileRefresh),
-                    null,
-                    Constants.FileUpdateDelayedStart,
-                    Constants.FileUpdateSleep);
+            }
+            catch (Exception e)
+            {
+                InitializationException = e;
             }
         }
 
@@ -122,6 +136,8 @@ namespace FiftyOne.Foundation.Mobile.Detection
         /// <param name="application">HttpApplication object for the web application.</param>
         protected void Initialise(HttpApplication application)
         {
+            _scheduleAutoUpdate();
+
             // Replace the browser capabilities provider with one that is 51Degrees
             // enabled if not done so already.
             if (HttpCapabilitiesBase.BrowserCapabilitiesProvider is
